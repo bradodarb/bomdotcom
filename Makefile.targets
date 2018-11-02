@@ -1,0 +1,42 @@
+SHELL:=/bin/bash
+
+
+.PHONY: check
+check: lint test-unit test-integration
+
+.PHONY: clean
+clean:
+	find . -name '*.pyc' -delete
+	find . -name '__pycache__' -delete
+	rm -rf .coverage
+	rm -rf htmlcov
+	rm -rf .pytest_cache
+	rm -rf .cache
+
+.PHONY: lint
+lint:
+	pylint ./src
+
+.PHONY: test
+test:
+	py.test -s --color=yes --cov-report html --cov-report term --cov=src test --cov-fail-under=80
+
+.PHONY: test-unit
+test-unit:
+	py.test --color=yes --cov-report html --cov-report term --cov=src test/unit --cov-fail-under=80
+
+.PHONY: test-integration
+test-local-integration:
+	py.test --color=yes --cov-report html --cov-report term --cov=src test/integration --cov-fail-under=80
+
+
+.PHONY: coverage
+coverage: test
+	google-chrome htmlcov/index.html
+	
+.PHONY: deploy-and-test
+deploy-and-test: check deploy test-aws-integration
+
+.PHONY: deploy-test-and-remove
+deploy-test-and-remove:	check deploy test-aws-integration remove
+
