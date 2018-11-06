@@ -3,10 +3,10 @@ import unittest
 
 from src.line_handlers.line_handler import ReportLimitHandler
 from src.line_handlers.re_line_handler import RegExBomLineHandler
-from src.logger import log
+from src.logger import LOG
 from src.processor import BomProccessor
 from src.record_provider import FileRecordProvider
-from src.line_handlers.line_handler import (MPN, Manufacturer, ReferenceDesignators)
+from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS)
 from src.reports.rank_report import rank_report
 from src.reports.running_rank_report import RunningRankingReport
 
@@ -15,10 +15,10 @@ class TestProcessor(unittest.TestCase):
 
     def setUp(self):
         os.environ['LOG_LEVEL'] = 'DEBUG'
-        log.info("======   Test: %s, SetUp", self.id())
+        LOG.info("======   Test: %s, SetUp", self.id())
 
     def tearDown(self):
-        log.info("------   Test: %s, TearDown", self.id())
+        LOG.info("------   Test: %s, TearDown", self.id())
 
     def test_BomProccessor_with_report_handler(self):
         handler = BomProccessor(FileRecordProvider('./test/test_data/bom.com').records(), [ReportLimitHandler()])
@@ -33,15 +33,15 @@ class TestProcessor(unittest.TestCase):
                                     ReportLimitHandler(),
                                     RegExBomLineHandler({
                                         MPN: 0,
-                                        Manufacturer: 1
+                                        MANUFACTUREER: 1
                                     }, lambda line: line.count(':') == 2),
                                     RegExBomLineHandler({
                                         MPN: -2,
-                                        Manufacturer: -1
+                                        MANUFACTUREER: -1
                                     }, lambda line: line.count(';') == 2),
                                     RegExBomLineHandler({
                                         MPN: 1,
-                                        Manufacturer: 0
+                                        MANUFACTUREER: 0
                                     }, lambda line: line.count(' -- ') == 1 and line.count(':') >= 1)
                                 ])
         self.assertTrue(len(handler.records) == 4)
@@ -59,20 +59,20 @@ class TestProcessor(unittest.TestCase):
                                     ReportLimitHandler(),
                                     RegExBomLineHandler({
                                         MPN: 0,
-                                        Manufacturer: 1
+                                        MANUFACTUREER: 1
                                     }, lambda line: line.count(':') == 2),
                                     RegExBomLineHandler({
                                         MPN: -2,
-                                        Manufacturer: -1
+                                        MANUFACTUREER: -1
                                     }, lambda line: line.count(';') == 2),
                                     RegExBomLineHandler({
                                         MPN: 1,
-                                        Manufacturer: 0
+                                        MANUFACTUREER: 0
                                     }, lambda line: line.count(' -- ') == 1 and line.count(':') >= 1)
                                 ], listeners=[report])
 
         self.assertTrue(len(handler.records) == 4)
-        results = list(report.results())
+        results = list(report.run())
 
         self.assertIsNotNone(list(results))
         self.assertEqual(len(list(results)), 2)

@@ -5,7 +5,7 @@ import re
 from collections import OrderedDict
 from typing import Callable
 
-from src.line_handlers.line_handler import (MPN, Manufacturer, ReferenceDesignators, NumOccurrences, BomLineHandler)
+from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES, BomLineHandler)
 from src.util.errors import HandlerValidationException
 
 
@@ -32,18 +32,18 @@ class RegExBomLineHandler(BomLineHandler):
         result = OrderedDict()
 
         result[MPN] = parts[self.part_map[MPN]].strip()
-        result[Manufacturer] = parts[self.part_map[Manufacturer]].strip()
-        result[ReferenceDesignators] = []
-        result[NumOccurrences] = 1
+        result[MANUFACTUREER] = parts[self.part_map[MANUFACTUREER]].strip()
+        result[REFERENCE_DESIGNATORS] = []
+        result[NUM_OCCURRENCES] = 1
 
-        exclusions = [result[Manufacturer], result[MPN]]
+        exclusions = [result[MANUFACTUREER], result[MPN]]
 
         for part in parts:
             part = part.strip()
             if part not in exclusions:
-                result[ReferenceDesignators].append(part)
+                result[REFERENCE_DESIGNATORS].append(part)
 
-        result[ReferenceDesignators].sort()
+        result[REFERENCE_DESIGNATORS].sort()
         return result
 
     def _validate(self, line: str):

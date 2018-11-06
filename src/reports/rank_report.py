@@ -4,8 +4,8 @@ This is not optimal as it adds another cycle through the already processed recor
 Report layer should be implemented via events when possible
 """
 
-from src.line_handlers.line_handler import (MPN, Manufacturer, ReferenceDesignators, NumOccurrences)
-from src.logger import log
+from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES)
+from src.logger import LOG
 
 
 def format_key(record: dict):
@@ -14,7 +14,7 @@ def format_key(record: dict):
     :param record: dict
     :return: str
     """
-    return f'{record[MPN]}::{record[Manufacturer]}'
+    return f'{record[MPN]}::{record[MANUFACTUREER]}'
 
 
 def rank_report(source: dict):
@@ -28,18 +28,18 @@ def rank_report(source: dict):
         for record in source['records']:
             key = format_key(record)
             if key in results:
-                results[key]['part'][NumOccurrences] += 1
+                results[key]['part'][NUM_OCCURRENCES] += 1
 
-                results[key]['part'][ReferenceDesignators] = list(set(
-                    results[key]['part'][ReferenceDesignators] + record[ReferenceDesignators]))
+                results[key]['part'][REFERENCE_DESIGNATORS] = list(set(
+                    results[key]['part'][REFERENCE_DESIGNATORS] + record[REFERENCE_DESIGNATORS]))
 
-                results[key]['rank'] = results[key]['part'][NumOccurrences] + len(
-                    results[key]['part'][ReferenceDesignators])
+                results[key]['rank'] = results[key]['part'][NUM_OCCURRENCES] + len(
+                    results[key]['part'][REFERENCE_DESIGNATORS])
 
             else:
                 results[key] = {
                     'part': record,
-                    'rank': record[NumOccurrences] + len(record[ReferenceDesignators])
+                    'rank': record[NUM_OCCURRENCES] + len(record[REFERENCE_DESIGNATORS])
                 }
 
         output = list(sorted(results, key=lambda x: results[x]['rank'], reverse=True))
@@ -49,5 +49,5 @@ def rank_report(source: dict):
         while cursor < source['report_limit']:
             yield results[output[cursor]]['part']
             cursor += 1
-    except (BaseException, Exception) as err:
-        log.exception(err)
+    except (KeyError, BaseException) as err:
+        LOG.exception(err)

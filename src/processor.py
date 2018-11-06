@@ -1,7 +1,10 @@
+"""
+Module for ingesting a stream of textual BOM data and outputting structured part info
+"""
 from typing import Iterator, List
 
 from src.line_handlers.line_handler import BomLineHandler
-from src.logger import log
+from src.logger import LOG
 from src.util.errors import HandlerValidationException, HandlerNotFoundException
 from src.util.parse_event import BomEvent
 
@@ -10,7 +13,8 @@ class BomProccessor:
     """
     Handles parsing a stream of textual BOM data into structured data
     """
-    def __init__(self, records: Iterator[str], handlers: List[BomLineHandler], listeners:list=None):
+
+    def __init__(self, records: Iterator[str], handlers: List[BomLineHandler], listeners: list = None):
         self._handlers = handlers
         self._current_handler = 0
         self._state = {
@@ -23,22 +27,38 @@ class BomProccessor:
             for listener in listeners:
                 self.bom_event += listener
 
-        self.process = self.process(records)
+        self.process(records)
 
     @property
     def records(self):
+        """
+        Processed records
+        :return: list[dict]
+        """
         return self._state.get('records')
 
     @property
     def failures(self):
+        """
+        Information on failed records
+        :return: list[dict]
+        """
         return self._state.get('failures')
 
     @property
     def result(self):
+        """
+        Complete BOM processing result
+        :return: dict
+        """
         return self._state
 
     @property
     def handler(self) -> BomLineHandler:
+        """
+        Gets current handler
+        :return: BomLineHandler
+        """
         return self._handlers[self._current_handler]
 
     def _next_handler(self):
@@ -65,21 +85,21 @@ class BomProccessor:
                     if attempts < 0:
                         raise HandlerNotFoundException('No handler found')
                     result = self.handler.parse(self._state, record)
-                    log.debug('Record Parse Attempted', f'{str(self.handler)} tried parsing {record}',
+                    LOG.debug('Record Parse Attempted', f'{str(self.handler)} tried parsing {record}',
                               record=record, result=result)
                     if result:
                         self._state['records'].append(result)
                         self._notify(record, result)
                     else:
                         self._next_handler()
-                except HandlerNotFoundException as nerr:
+                except HandlerNotFoundException:
                     # log.exception(nerr, record=record)
                     self._state['failures'].append({
                         'line': record,
                         'handler': str(self._current_handler)
                     })
                     break
-                except (HandlerValidationException, BaseException) as err:
+                except (HandlerValidationException, BaseException):
                     self._next_handler()
                 attempts -= 1
 
@@ -94,6 +114,6 @@ class BomProccessor:
             if self.bom_event:
                 self.bom_event(sender=self, line=line, record=record, state=self._state)
         except AttributeError as aerr:
-            log.error('Invalid BOM Notification', str(aerr))
+            LOG.error('Invalid BOM Notification', str(aerr))
         except BaseException as err:
-            log.exception(err)
+            LOG.exception(err)

@@ -1,3 +1,6 @@
+"""
+Expose default logger
+"""
 from src.logger.slog import StructLog
 
-log = StructLog()
+LOG = StructLog()

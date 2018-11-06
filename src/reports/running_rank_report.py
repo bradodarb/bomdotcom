@@ -2,9 +2,7 @@
 Example report for part data analytics implemeneted as
 """
 
-from src.line_handlers.line_handler import (MPN, Manufacturer, ReferenceDesignators, NumOccurrences)
-from src.logger import log
-
+from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES)
 
 class RunningRankingReport:
     """
@@ -28,18 +26,18 @@ class RunningRankingReport:
         if record:
             key = RunningRankingReport.format_key(record)
             if key in self.results:
-                self.results[key]['part'][NumOccurrences] += 1
+                self.results[key]['part'][NUM_OCCURRENCES] += 1
 
-                self.results[key]['part'][ReferenceDesignators] = list(set(
-                    self.results[key]['part'][ReferenceDesignators] + record[ReferenceDesignators]))
+                self.results[key]['part'][REFERENCE_DESIGNATORS] = list(set(
+                    self.results[key]['part'][REFERENCE_DESIGNATORS] + record[REFERENCE_DESIGNATORS]))
 
-                self.results[key]['rank'] = self.results[key]['part'][NumOccurrences] + len(
-                    self.results[key]['part'][ReferenceDesignators])
+                self.results[key]['rank'] = self.results[key]['part'][NUM_OCCURRENCES] + len(
+                    self.results[key]['part'][REFERENCE_DESIGNATORS])
 
             else:
                 self.results[key] = {
                     'part': record,
-                    'rank': record[NumOccurrences] + len(record[ReferenceDesignators])
+                    'rank': record[NUM_OCCURRENCES] + len(record[REFERENCE_DESIGNATORS])
                 }
 
     def run(self):
@@ -62,6 +60,6 @@ class RunningRankingReport:
         :param record: dict
         :return: str
         """
-        return f'{record[MPN]}::{record[Manufacturer]}'
+        return f'{record[MPN]}::{record[MANUFACTUREER]}'
 
     __call__ = on_bom_record

@@ -1,3 +1,6 @@
+"""
+String manipulation utils
+"""
 from typing import Callable
 
 

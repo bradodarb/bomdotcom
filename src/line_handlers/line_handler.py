@@ -5,9 +5,9 @@ BOM Base line parser
 import abc
 
 MPN = 'MPN'
-Manufacturer = 'Manufacturer'
-ReferenceDesignators = 'ReferenceDesignators'
-NumOccurrences = 'NumOccurrences'
+MANUFACTUREER = 'Manufacturer'
+REFERENCE_DESIGNATORS = 'ReferenceDesignators'
+NUM_OCCURRENCES = 'NumOccurrences'
 
 
 class BomLineHandler:

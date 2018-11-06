@@ -6,8 +6,6 @@ import logging
 import structlog
 from pythonjsonlogger import jsonlogger
 
-MAX_LOG_OUTPUT = 20000
-MAX_LOG_APPEND = ' ...'
 
 
 class StructLog:
@@ -15,7 +13,10 @@ class StructLog:
     Reasonable settings for structured logger with a flent interface
     """
 
-    def __init__(self, logger_key: str='Application'):
+    MAX_LOG_OUTPUT = 20000
+    MAX_LOG_APPEND = ' ...'
+
+    def __init__(self, logger_key: str = 'Application'):
         structlog.configure(
             processors=[
                 structlog.stdlib.filter_by_level,
@@ -48,8 +49,8 @@ class StructLog:
         if not limit_output:
             return msg
         msg_str = str(msg)
-        return (msg_str[:MAX_LOG_OUTPUT] +
-                MAX_LOG_APPEND) if len(msg_str) > MAX_LOG_OUTPUT else msg
+        return (msg_str[:self.MAX_LOG_OUTPUT] +
+                self.MAX_LOG_APPEND) if len(msg_str) > self.MAX_LOG_OUTPUT else msg
 
     def bind(self, **value):
         """

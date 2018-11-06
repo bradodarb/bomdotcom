@@ -2,7 +2,7 @@ SHELL:=/bin/bash
 
 
 .PHONY: check
-check: lint test-unit test-integration
+check: lint test
 
 .PHONY: clean
 clean:
