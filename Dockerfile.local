@@ -10,7 +10,7 @@ RUN mkdir -p /code
 
 COPY . /code/
 
-RUN pip3 install --upgrade pip -r ./code/deploy-requirements.txt -r /code/test/requirements.txt
+RUN pip3 install --upgrade pip -r /code/test/requirements.txt
 
 RUN yarn global add serverless
 

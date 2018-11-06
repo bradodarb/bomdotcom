@@ -12,10 +12,10 @@ MAX_LOG_APPEND = ' ...'
 
 class StructLog:
     """
-    Reasonable settings for structured logging with a flent interface
+    Reasonable settings for structured logger with a flent interface
     """
 
-    def __init__(self, logger_key: str):
+    def __init__(self, logger_key: str='Application'):
         structlog.configure(
             processors=[
                 structlog.stdlib.filter_by_level,
