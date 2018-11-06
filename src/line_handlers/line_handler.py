@@ -5,7 +5,7 @@ BOM Base line parser
 import abc
 
 MPN = 'MPN'
-MANUFACTUREER = 'Manufacturer'
+MANUFACTURER = 'Manufacturer'
 REFERENCE_DESIGNATORS = 'ReferenceDesignators'
 NUM_OCCURRENCES = 'NumOccurrences'
 

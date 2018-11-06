@@ -6,7 +6,7 @@ from src.line_handlers.re_line_handler import RegExBomLineHandler
 from src.logger import LOG
 from src.processor import BomProccessor
 from src.record_provider import FileRecordProvider
-from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS)
+from src.line_handlers.line_handler import (MPN, MANUFACTURER, REFERENCE_DESIGNATORS)
 from src.reports.rank_report import rank_report
 from src.reports.running_rank_report import RunningRankingReport
 
@@ -33,15 +33,15 @@ class TestProcessor(unittest.TestCase):
                                     ReportLimitHandler(),
                                     RegExBomLineHandler({
                                         MPN: 0,
-                                        MANUFACTUREER: 1
+                                        MANUFACTURER: 1
                                     }, lambda line: line.count(':') == 2),
                                     RegExBomLineHandler({
                                         MPN: -2,
-                                        MANUFACTUREER: -1
+                                        MANUFACTURER: -1
                                     }, lambda line: line.count(';') == 2),
                                     RegExBomLineHandler({
                                         MPN: 1,
-                                        MANUFACTUREER: 0
+                                        MANUFACTURER: 0
                                     }, lambda line: line.count(' -- ') == 1 and line.count(':') >= 1)
                                 ])
         self.assertTrue(len(handler.records) == 4)
@@ -59,15 +59,15 @@ class TestProcessor(unittest.TestCase):
                                     ReportLimitHandler(),
                                     RegExBomLineHandler({
                                         MPN: 0,
-                                        MANUFACTUREER: 1
+                                        MANUFACTURER: 1
                                     }, lambda line: line.count(':') == 2),
                                     RegExBomLineHandler({
                                         MPN: -2,
-                                        MANUFACTUREER: -1
+                                        MANUFACTURER: -1
                                     }, lambda line: line.count(';') == 2),
                                     RegExBomLineHandler({
                                         MPN: 1,
-                                        MANUFACTUREER: 0
+                                        MANUFACTURER: 0
                                     }, lambda line: line.count(' -- ') == 1 and line.count(':') >= 1)
                                 ], listeners=[report])
 

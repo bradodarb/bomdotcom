@@ -5,7 +5,7 @@ import re
 from collections import OrderedDict
 from typing import Callable
 
-from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES, BomLineHandler)
+from src.line_handlers.line_handler import (MPN, MANUFACTURER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES, BomLineHandler)
 from src.util.errors import HandlerValidationException
 
 
@@ -32,11 +32,11 @@ class RegExBomLineHandler(BomLineHandler):
         result = OrderedDict()
 
         result[MPN] = parts[self.part_map[MPN]].strip()
-        result[MANUFACTUREER] = parts[self.part_map[MANUFACTUREER]].strip()
+        result[MANUFACTURER] = parts[self.part_map[MANUFACTURER]].strip()
         result[REFERENCE_DESIGNATORS] = []
         result[NUM_OCCURRENCES] = 1
 
-        exclusions = [result[MANUFACTUREER], result[MPN]]
+        exclusions = [result[MANUFACTURER], result[MPN]]
 
         for part in parts:
             part = part.strip()

@@ -8,7 +8,7 @@ clean:
 
 .PHONY: deps
 deps:
-	pip install -r ./test/requirements.txt && python setup.py install --prefix=../.local
+	pip install -r ./test/requirements.txt && python setup.py develop --prefix=../.local
 
 .PHONY: run
 run:

@@ -2,7 +2,7 @@
 Example report for part data analytics implemeneted as
 """
 
-from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES)
+from src.line_handlers.line_handler import (MPN, MANUFACTURER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES)
 
 class RunningRankingReport:
     """
@@ -60,6 +60,6 @@ class RunningRankingReport:
         :param record: dict
         :return: str
         """
-        return f'{record[MPN]}::{record[MANUFACTUREER]}'
+        return f'{record[MPN]}::{record[MANUFACTURER]}'
 
     __call__ = on_bom_record

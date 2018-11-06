@@ -4,7 +4,7 @@ This is not optimal as it adds another cycle through the already processed recor
 Report layer should be implemented via events when possible
 """
 
-from src.line_handlers.line_handler import (MPN, MANUFACTUREER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES)
+from src.line_handlers.line_handler import (MPN, MANUFACTURER, REFERENCE_DESIGNATORS, NUM_OCCURRENCES)
 from src.logger import LOG
 
 
@@ -14,7 +14,7 @@ def format_key(record: dict):
     :param record: dict
     :return: str
     """
-    return f'{record[MPN]}::{record[MANUFACTUREER]}'
+    return f'{record[MPN]}::{record[MANUFACTURER]}'
 
 
 def rank_report(source: dict):
